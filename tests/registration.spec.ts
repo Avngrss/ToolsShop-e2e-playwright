@@ -17,6 +17,7 @@ test.describe("Registration tests", async () => {
     await expect(page).toHaveURL(
       "https://practicesoftwaretesting.com/auth/login"
     );
+    await page.pause();
   });
 
   test("Password visibility toggle", async () => {

@@ -15,7 +15,7 @@ export const createUser = (partialUser: Partial<User> = {}): User => {
     country: "Canada",
     phone: "1234567890",
     email: `user${timestamp}${randomSuffix}@example.com`,
-    password: "SecurePass123!",
+    password: "Gosu@password123!",
     ...partialUser,
   };
 };
