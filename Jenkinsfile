@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         nodejs "NodeJS-24"
-        jdk "Java-17"
+        jdk "JDK"
     }
 
     stages {
