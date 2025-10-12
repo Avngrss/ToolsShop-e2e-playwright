@@ -1,9 +1,9 @@
-// Jenkinsfile
 pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-24" 
+        nodejs "NodeJS-24"
+        jdk "Java-17"
     }
 
     stages {
@@ -15,20 +15,14 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
-                sh 'npx playwright install --with-deps'
+                bat 'npm ci'
+                bat 'npx playwright install --with-deps'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test'
-            }
-        }
-
-        stage('Generate Allure Report') {
-            steps {
-                sh 'npm run allure:generate'
+                bat 'npm test'
             }
         }
     }
@@ -37,30 +31,20 @@ pipeline {
         always {
             allure results: [[path: 'allure-results']]
         }
-
         success {
             emailext (
                 subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <p>Тесты прошли успешно!</p>
-                    <p><a href='${env.BUILD_URL}allure/'>🔗 Посмотреть Allure-отчёт</a></p>
-                    <p>Branch: ${env.GIT_BRANCH}</p>
-                """,
+                body: "<p>Allure Report: <a href='${env.BUILD_URL}allure/'>link</a></p>",
                 mimeType: 'text/html',
-                to: 'you@gmail.com' 
+                to: 'yurkasedow0@gmail.com'
             )
         }
-
         failure {
             emailext (
                 subject: "❌ FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <p>Тесты упали!</p>
-                    <p><a href='${env.BUILD_URL}allure/'>🔗 Посмотреть Allure-отчёт</a></p>
-                    <p><a href='${env.BUILD_URL}console'>📄 Логи сборки</a></p>
-                """,
+                body: "<p>Allure Report: <a href='${env.BUILD_URL}allure/'>link</a></p>",
                 mimeType: 'text/html',
-                to: 'you@gmail.com' 
+                to: 'yurkasedow0@gmail.com'
             )
         }
     }
