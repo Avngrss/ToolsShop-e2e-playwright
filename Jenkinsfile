@@ -6,6 +6,10 @@ pipeline {
         jdk "JDK"
     }
 
+    environment {
+        NOTIFICATION_EMAIL = credentials('NOTIFICATION_EMAIL')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -36,7 +40,7 @@ pipeline {
                 subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "<p>Allure Report: <a href='${env.BUILD_URL}allure/'>link</a></p>",
                 mimeType: 'text/html',
-                to: 'yurkasedow0@gmail.com'
+                to: env.NOTIFICATION_EMAIL
             )
         }
         failure {
@@ -44,7 +48,7 @@ pipeline {
                 subject: "❌ FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "<p>Allure Report: <a href='${env.BUILD_URL}allure/'>link</a></p>",
                 mimeType: 'text/html',
-                to: 'yurkasedow0@gmail.com'
+                to: env.NOTIFICATION_EMAIL
             )
         }
     }
