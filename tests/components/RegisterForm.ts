@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { User } from "../types/User";
+import { User } from "../../types/User";
 
-export class RegistrationPage {
+export class RegisterForm {
   readonly page: Page;
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
@@ -34,10 +34,6 @@ export class RegistrationPage {
       'button:has(svg[data-icon="eye"]), button:has(svg[data-icon="eye-slash"])'
     );
     this.registerButton = page.getByTestId("register-submit");
-  }
-
-  async goto() {
-    await this.page.goto("auth/register");
   }
 
   async fillForm(user: User) {
