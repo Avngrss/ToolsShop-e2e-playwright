@@ -22,6 +22,10 @@ export class Header {
   private readonly langFr: Locator;
   private readonly langNl: Locator;
   private readonly langTr: Locator;
+  //Logout locators
+  private readonly userMenuToggle: Locator;
+  private readonly signOutLink: Locator;
+  private readonly myAccountLink: Locator;
 
   constructor(private page: Page) {
     this.root = page.locator("app-header");
@@ -47,6 +51,10 @@ export class Header {
     this.langFr = page.getByTestId("lang-fr");
     this.langNl = page.getByTestId("lang-nl");
     this.langTr = page.getByTestId("lang-tr");
+
+    this.userMenuToggle = page.getByTestId("nav-menu");
+    this.signOutLink = page.getByTestId("nav-sign-out");
+    this.myAccountLink = page.getByTestId("nav-my-account");
   }
 
   async goToHome() {
@@ -80,10 +88,6 @@ export class Header {
     await this.contactLink.click();
   }
 
-  async goToSignIn() {
-    await this.signInLink.click();
-  }
-
   async openLanguageMenu() {
     await this.languageToggle.click();
   }
@@ -99,5 +103,34 @@ export class Header {
       TR: this.langTr,
     };
     await langMap[lang].click();
+  }
+
+  async logout(): Promise<void> {
+    const toggle = this.userMenuToggle;
+    await toggle.scrollIntoViewIfNeeded();
+    const box = await toggle.boundingBox();
+    if (!box) throw new Error("userMenuToggle is not in view");
+
+    await this.page.mouse.click(box.x + 10, box.y + 10);
+
+    await this.signOutLink.waitFor({ state: "visible", timeout: 10000 });
+    await this.signOutLink.click();
+    await this.userMenuToggle.waitFor({ state: "hidden", timeout: 10000 });
+  }
+
+  async isLoggedIn(): Promise<boolean> {
+    return await this.userMenuToggle.isVisible({ timeout: 10000 });
+  }
+
+  async goToMyAccount(): Promise<void> {
+    await this.userMenuToggle.click();
+    await this.myAccountLink.click();
+  }
+
+  async goToAuthPage(): Promise<void> {
+    if (await this.isLoggedIn()) {
+      await this.logout();
+    }
+    await this.signInLink.click();
   }
 }
