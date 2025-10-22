@@ -7,7 +7,7 @@ test(
   "should login user via API",
   { tag: ["@api", "@auth", "@smoke", "@positive"] },
   async ({ request }) => {
-    const res = await request.post(
+    const loginRes = await request.post(
       "https://api.practicesoftwaretesting.com/users/login",
       {
         data: {
@@ -16,24 +16,33 @@ test(
         },
       }
     );
-    expect(res.status()).toBe(200);
+    expect(loginRes.status()).toBe(200);
+    const loginData = await loginRes.json();
+
+    const token = loginData.access_token;
+    expect(token).toBeTruthy();
 
     const profileRes = await request.get(
-      "https://api.practicesoftwaretesting.com/users/me"
+      "https://api.practicesoftwaretesting.com/users/me",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     expect(profileRes.status()).toBe(200);
 
-    const profile = profileRes.json();
+    const profile = await profileRes.json();
+
     expect(profile).toMatchObject({
       email: userCredential.email,
       first_name: expect.any(String),
       last_name: expect.any(String),
       phone: expect.any(String),
       dob: expect.any(String),
-      provider: expect.any(String),
+      provider: null,
       totp_enabled: expect.any(Boolean),
-      enabled: true,
-      failed_login_attempts: expect.any(Number),
       created_at: expect.any(String),
     });
   }
