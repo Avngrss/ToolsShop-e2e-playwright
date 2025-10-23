@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { ContactUsPage } from "../../../pages/ContactPage";
 import { validContactFormData } from "../../../../types/ContactFormData";
+const API_BASE_URL = process.env.API_BASE_URL;
 
 test.describe("Contact us form tests", () => {
   let contactUsPage: ContactUsPage;
@@ -16,9 +17,7 @@ test.describe("Contact us form tests", () => {
     async ({ page }) => {
       const responsePromise = page.waitForResponse(
         (resp) =>
-          resp
-            .url()
-            .includes("https://api.practicesoftwaretesting.com/messages") &&
+          resp.url().includes(`${API_BASE_URL}/messages`) &&
           resp.status() === 200
       );
       await contactUsPage.contactForm.submitContactForm(validContactFormData);

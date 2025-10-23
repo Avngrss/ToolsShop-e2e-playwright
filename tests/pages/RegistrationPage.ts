@@ -12,6 +12,6 @@ export class RegistrationPage {
   }
 
   async goto() {
-    await this.page.goto("auth/register");
+    await this.page.goto("/auth/register");
   }
 }

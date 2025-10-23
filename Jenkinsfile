@@ -7,6 +7,8 @@ pipeline {
     }
 
     environment {
+        API_BASE_URL = 'https://api.practicesoftwaretesting.com'
+        WEB_BASE_URL = 'https://practicesoftwaretesting.com'
         NOTIFICATION_EMAIL = credentials('NOTIFICATION_EMAIL')
     }
 
