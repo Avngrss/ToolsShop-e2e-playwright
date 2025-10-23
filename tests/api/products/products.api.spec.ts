@@ -6,7 +6,7 @@ test(
   { tag: ["@api", "@products", "@positive"] },
   async ({ request }) => {
     const res = await request.get(
-      `${API_BASE_URL}products/01K8972SPXW1EMDYAC7DEM6TGC`
+      `${API_BASE_URL}/products/01K8972SPXW1EMDYAC7DEM6TGC`
     );
     expect(res.status()).toBe(200);
     const data = await res.json();

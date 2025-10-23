@@ -36,6 +36,7 @@ test.describe("Register link navigation", () => {
       let loginPage: LoginPage;
 
       loginPage = new LoginPage(page);
+      await loginPage.goto();
       await loginPage.loginForm.registerLinkNavigation();
       await expect(page).toHaveURL(`/auth/register`);
     }
@@ -50,6 +51,7 @@ test.describe("Forgot your password link navigation", () => {
       let loginPage: LoginPage;
 
       loginPage = new LoginPage(page);
+      await loginPage.goto();
       await loginPage.loginForm.forgotPasswordLinkNavigation();
       await expect(page).toHaveURL(`/auth/forgot-password`);
     }
