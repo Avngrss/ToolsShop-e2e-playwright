@@ -1,12 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
+import * as dotenv from "dotenv";
 
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+dotenv.config();
 
 export default defineConfig({
   testDir: "./tests",
@@ -26,9 +21,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: "https://practicesoftwaretesting.com/",
-
-    /* Collect trace when retrying the failed test. */
+    baseURL: process.env.WEB_BASE_URL,
     trace: "on-first-retry",
     testIdAttribute: "data-test",
   },

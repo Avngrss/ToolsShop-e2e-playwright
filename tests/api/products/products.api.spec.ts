@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
+const API_BASE_URL = process.env.API_BASE_URL;
 
 test(
   "API returns correct product",
   { tag: ["@api", "@products", "@positive"] },
   async ({ request }) => {
     const res = await request.get(
-      "https://api.practicesoftwaretesting.com/products/01K83YVH843CWAM05M4DMJ8W8C"
+      `${API_BASE_URL}products/01K8972SPXW1EMDYAC7DEM6TGC`
     );
     expect(res.status()).toBe(200);
     const data = await res.json();

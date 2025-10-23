@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { loadUser } from "../../../../utils/userStorage";
 import { LoginPage } from "../../../pages/SigninPage";
+const WEB_BASE_URL = process.env.WEB_BASE_URL;
 
 test.describe("Login tests", async () => {
   let loginPage: LoginPage;
@@ -15,17 +16,12 @@ test.describe("Login tests", async () => {
     "Should successfully login",
     { tag: ["@ui", "@auth", "@smoke", "@positive"] },
     async ({ page }) => {
-      const loginPromise = page.waitForResponse(
-        (resp) => resp.url().includes("/auth/login") && resp.status() === 200
-      );
       await loginPage.loginForm.login(
         userCredential.email,
         userCredential.password
       );
-      await loginPromise;
-      await expect(page).toHaveURL(
-        "https://practicesoftwaretesting.com/account"
-      );
+
+      await expect(page).toHaveURL(`${WEB_BASE_URL}/account`);
       const profileHeading = page.getByTestId("page-title");
       await expect(profileHeading).toBeVisible();
       await expect(profileHeading).toHaveText("My account");
@@ -42,7 +38,7 @@ test.describe("Register link navigation", () => {
 
       loginPage = new LoginPage(page);
       await loginPage.loginForm.registerLinkNavigation();
-      await expect(page).toHaveURL("/auth/register");
+      await expect(page).toHaveURL(`${WEB_BASE_URL}/auth/register`);
     }
   );
 });
@@ -56,7 +52,7 @@ test.describe("Forgot your password link navigation", () => {
 
       loginPage = new LoginPage(page);
       await loginPage.loginForm.forgotPasswordLinkNavigation();
-      await expect(page).toHaveURL("/auth/forgot-password");
+      await expect(page).toHaveURL(`${WEB_BASE_URL}/auth/forgot-password`);
     }
   );
 });
@@ -78,9 +74,7 @@ test.describe("Logout test", async () => {
         userCredential.email,
         userCredential.password
       );
-      await expect(page).toHaveURL(
-        "https://practicesoftwaretesting.com/account"
-      );
+      await expect(page).toHaveURL(`${WEB_BASE_URL}/account`);
       const profileHeading = page.getByTestId("page-title");
       await expect(profileHeading).toBeVisible();
       await expect(profileHeading).toHaveText("My account");
