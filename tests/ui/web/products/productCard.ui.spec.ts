@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { HomePage } from "../../../pages/HomePage";
 import { ProductDetailPage } from "../../../pages/ProductDetailPage";
+const API_BASE_URL = process.env.API_BASE_URL;
 
 test.describe("Products card page", () => {
   let homePage: HomePage;
@@ -51,9 +52,7 @@ test.describe("Products card page", () => {
     "UI product data matches API response",
     { tag: ["@ui", "@products", "@smoke", "@positive"] },
     async ({ request }) => {
-      const apiResponse = await request.get(
-        "https://api.practicesoftwaretesting.com/products?page=1"
-      );
+      const apiResponse = await request.get(`${API_BASE_URL}/products?page=1`);
       const apiProducts = await apiResponse.json();
 
       const uiCards = await homePage.getAllCards(apiProducts.length);

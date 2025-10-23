@@ -16,14 +16,14 @@ test(
       userCredential.email,
       userCredential.password
     );
-    await expect(page).toHaveURL(`${WEB_BASE_URL}/account`);
+    await expect(page).toHaveURL(`/account`);
     const profileHeading = page.getByTestId("page-title");
     await expect(profileHeading).toBeVisible();
     await expect(profileHeading).toHaveText("My account");
 
     const header = new Header(page);
     await header.logout();
-    await expect(page).toHaveURL(`${WEB_BASE_URL}/auth/login`);
+    await expect(page).toHaveURL(`/auth/login`);
     expect(await new Header(page).isLoggedIn()).toBe(false);
   }
 );
