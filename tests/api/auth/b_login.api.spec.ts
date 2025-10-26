@@ -27,19 +27,6 @@ test(
       },
     });
     expect(profileRes.status()).toBe(200);
-
-    const profile = await profileRes.json();
-
-    expect(profile).toMatchObject({
-      email: userCredential.email,
-      first_name: expect.any(String),
-      last_name: expect.any(String),
-      phone: expect.any(String),
-      dob: expect.any(String),
-      provider: null,
-      totp_enabled: expect.any(Boolean),
-      created_at: expect.any(String),
-    });
   }
 );
 

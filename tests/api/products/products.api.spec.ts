@@ -5,9 +5,16 @@ test(
   "API returns correct product",
   { tag: ["@api", "@products", "@positive"] },
   async ({ request }) => {
-    const res = await request.get(
-      `${API_BASE_URL}/products/01K8972SPXW1EMDYAC7DEM6TGC`
-    );
+    const listResponse = await request.get(`${API_BASE_URL}/products`);
+    expect(listResponse.status()).toBe(200);
+    const responseJson = await listResponse.json();
+    expect(responseJson).toHaveProperty("data");
+    expect(responseJson.data).toBeInstanceOf(Array);
+
+    expect(responseJson.data.length).toBeGreaterThan(0);
+    const firstProductId = responseJson.data[0].id;
+
+    const res = await request.get(`${API_BASE_URL}/products/${firstProductId}`);
     expect(res.status()).toBe(200);
     const data = await res.json();
     expect(data.name).toBe("Combination Pliers");

@@ -3,20 +3,40 @@ import { Header } from "../components/Header";
 import { ProductCardComponent } from "../components/ProductCard";
 import { SortComponent } from "../components/SortProducts";
 import { SortOptionValue } from "../../types/sortOption";
+import { SearchProduct } from "../components/SearchProducts";
 
 export class HomePage {
   readonly page: Page;
   readonly header: Header;
   readonly productCards: Locator;
+  readonly searchCompletedContainer: Locator;
+  readonly initialProductCards: Locator;
+  readonly initialContainerLocator: Locator;
   readonly sortComponent: SortComponent;
   readonly productCardContainer: Locator;
+  readonly searchComponent: SearchProduct;
+  readonly searchCaption: Locator;
+  readonly noResult: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.header = new Header(page);
     this.productCards = page.locator('a.card[data-test^="product-"]');
+
     this.sortComponent = new SortComponent(page);
     this.productCardContainer = this.page.locator(".container");
+    this.searchComponent = new SearchProduct(page);
+    this.initialContainerLocator = page.locator(
+      'div.col-md-9 > div.container[data-test=""]'
+    );
+    this.initialProductCards = this.initialContainerLocator.locator(
+      'a.card[data-test^="product-"]'
+    );
+    this.searchCompletedContainer = page.locator(
+      'div.col-md-9 > div.container[data-test="search_completed"]'
+    );
+    this.searchCaption = page.getByTestId("search-caption");
+    this.noResult = page.getByTestId("no-results");
   }
 
   async goto() {
@@ -161,5 +181,54 @@ export class HomePage {
   ): Promise<string[]> {
     await this.applySort(optionValue);
     return await this.getCO2Ratings();
+  }
+
+  //Search products
+
+  async fillSearch(query: string): Promise<void> {
+    await this.searchComponent.searchQuery.fill(query);
+  }
+
+  async clickSearchButton(): Promise<void> {
+    await this.searchComponent.searchSubmit.click();
+  }
+
+  async clickSearchReset(): Promise<void> {
+    await this.searchComponent.searchReset.click();
+  }
+
+  async getCurrentSearchQuery(): Promise<string> {
+    return await this.searchComponent.searchQuery.inputValue();
+  }
+
+  async checkIfProductNamesInclude(searchTerm: string): Promise<boolean> {
+    const names = await this.getProductNames();
+    return names.every((name) =>
+      name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  async getFilteredCards(): Promise<ProductCardComponent[]> {
+    const filteredCardLocators = await this.searchCompletedContainer
+      .locator('a.card[data-test^="product-"]')
+      .all();
+    const cards = [];
+    for (const locator of filteredCardLocators) {
+      await locator.waitFor({ state: "visible" });
+      cards.push(new ProductCardComponent(this.page, locator));
+    }
+    return cards;
+  }
+
+  async getFilteredProductNames(): Promise<string[]> {
+    const cards = await this.getFilteredCards();
+    const names: string[] = [];
+    for (const card of cards) {
+      const name = await card.getProductName();
+      if (name) {
+        names.push(name.trim());
+      }
+    }
+    return names;
   }
 }
