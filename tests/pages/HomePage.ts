@@ -4,6 +4,7 @@ import { ProductCardComponent } from "../components/ProductCard";
 import { SortComponent } from "../components/SortProducts";
 import { SortOptionValue } from "../../types/sortOption";
 import { SearchProduct } from "../components/SearchProducts";
+import { RangeSliderComponent } from "../components/RangeSlider";
 
 export class HomePage {
   readonly page: Page;
@@ -17,6 +18,7 @@ export class HomePage {
   readonly searchComponent: SearchProduct;
   readonly searchCaption: Locator;
   readonly noResult: Locator;
+  readonly rangeSliderComponent: RangeSliderComponent;
 
   constructor(page: Page) {
     this.page = page;
@@ -37,6 +39,8 @@ export class HomePage {
     );
     this.searchCaption = page.getByTestId("search-caption");
     this.noResult = page.getByTestId("no-results");
+
+    this.rangeSliderComponent = new RangeSliderComponent(page);
   }
 
   async goto() {
@@ -230,5 +234,34 @@ export class HomePage {
       }
     }
     return names;
+  }
+
+  async verifyProductsInPriceRangeOrNone(
+    min: number,
+    max: number
+  ): Promise<void> {
+    const noResultsVisible = await this.noResult.isVisible();
+    const prices = await this.getProductPrices();
+
+    if (noResultsVisible) {
+      if (prices.length > 0) {
+        throw new Error(
+          'Contradiction: "No results" message is visible, but product cards are present.'
+        );
+      }
+      return;
+    }
+    if (prices.length === 0) {
+      throw new Error(
+        'No products displayed and "No results" message is not visible — ambiguous state.'
+      );
+    }
+    for (const price of prices) {
+      if (price < min || price > max) {
+        throw new Error(
+          `Product price ${price} is outside the allowed range [${min}, ${max}]`
+        );
+      }
+    }
   }
 }

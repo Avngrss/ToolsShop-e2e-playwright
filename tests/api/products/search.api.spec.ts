@@ -43,3 +43,16 @@ test(
     }
   }
 );
+
+test(
+  "should return empty data via API",
+  { tag: ["@api", "@products", "@search", "@negative"] },
+  async ({ request }) => {
+    const res = await request.get(`${API_BASE_URL}/products/search?q=none`);
+    expect(res.status()).toBe(200);
+    const resJson = await res.json();
+    expect(resJson).toHaveProperty("data");
+    expect(Array.isArray(resJson.data)).toBeTruthy();
+    expect(resJson.data).toHaveLength(0);
+  }
+);
