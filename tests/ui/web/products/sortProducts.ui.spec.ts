@@ -1,5 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { HomePage } from "../../../pages/HomePage";
+import {
+  isSortedAscendingString,
+  isSortedAscendingNumber,
+  isSortedAscendingCO2,
+  isSortedDescendingString,
+  isSortedDescendingNumber,
+  isSortedDescendingCO2,
+} from "../../../../utils/sortingUtils";
 
 test.describe("Product Sorting", { tag: "@sorting" }, () => {
   let homePage: HomePage;
@@ -23,7 +31,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify names are sorted ascending", async () => {
-        expect(homePage.isSortedAscendingString(sortedNames)).toBe(true);
+        expect(isSortedAscendingString(sortedNames)).toBe(true);
       });
     }
   );
@@ -42,7 +50,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify names are sorted descending", async () => {
-        expect(homePage.isSortedDescendingString(sortedNames)).toBe(true);
+        expect(isSortedDescendingString(sortedNames)).toBe(true);
       });
     }
   );
@@ -61,7 +69,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify prices are sorted ascending", async () => {
-        expect(homePage.isSortedAscendingNumber(sortedPrices)).toBe(true);
+        expect(isSortedAscendingNumber(sortedPrices)).toBe(true);
       });
     }
   );
@@ -80,7 +88,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify prices are sorted descending", async () => {
-        expect(homePage.isSortedDescendingNumber(sortedPrices)).toBe(true);
+        expect(isSortedDescendingNumber(sortedPrices)).toBe(true);
       });
     }
   );
@@ -99,7 +107,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify CO₂ ratings are sorted ascending", async () => {
-        expect(homePage.isSortedAscendingCO2(sortedRatings)).toBe(true);
+        expect(isSortedAscendingCO2(sortedRatings)).toBe(true);
       });
     }
   );
@@ -118,7 +126,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
         });
 
       await test.step("Verify CO₂ ratings are sorted descending", async () => {
-        expect(homePage.isSortedDescendingCO2(sortedRatings)).toBe(true);
+        expect(isSortedDescendingCO2(sortedRatings)).toBe(true);
       });
     }
   );
@@ -146,7 +154,7 @@ test.describe("Product Sorting", { tag: "@sorting" }, () => {
       });
 
       await test.step("Verify names are sorted ascending", async () => {
-        expect(homePage.isSortedAscendingString(sortedNames)).toBe(true);
+        expect(isSortedAscendingString(sortedNames)).toBe(true);
       });
     }
   );

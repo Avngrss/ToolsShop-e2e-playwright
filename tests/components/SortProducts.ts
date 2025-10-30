@@ -12,6 +12,5 @@ export class SortComponent {
 
   async selectSortOption(optionValue: SortOptionValue) {
     await this.sortSelect.selectOption({ value: optionValue });
-    await this.sortSelect.page().waitForLoadState("networkidle");
   }
 }

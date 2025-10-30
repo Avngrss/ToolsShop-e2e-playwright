@@ -12,4 +12,20 @@ export class SearchProduct {
     this.searchReset = page.getByTestId("search-reset");
     this.searchSubmit = page.getByTestId("search-submit");
   }
+
+    async fillSearch(query: string): Promise<void> {
+    await this.searchQuery.fill(query);
+  }
+
+  async clickSearchButton(): Promise<void> {
+    await this.searchSubmit.click();
+  }
+
+  async clickSearchReset(): Promise<void> {
+    await this.searchReset.click();
+  }
+
+  async getCurrentSearchQuery(): Promise<string> {
+    return await this.searchQuery.inputValue();
+  }
 }

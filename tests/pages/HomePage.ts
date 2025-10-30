@@ -109,63 +109,6 @@ export class HomePage {
     await this.page.waitForLoadState("networkidle");
   }
 
-  isSortedAscendingString(arr: string[]): boolean {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] < arr[i - 1]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  isSortedDescendingString(arr: string[]): boolean {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] > arr[i - 1]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  isSortedAscendingNumber(arr: number[]): boolean {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] < arr[i - 1]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  isSortedDescendingNumber(arr: number[]): boolean {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] > arr[i - 1]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  isSortedAscendingCO2(arr: string[]): boolean {
-    const ratingToValue = (rating: string): number =>
-      ({ A: 1, B: 2, C: 3, D: 4, E: 5 }[rating] || 0);
-    for (let i = 1; i < arr.length; i++) {
-      if (ratingToValue(arr[i]) < ratingToValue(arr[i - 1])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  isSortedDescendingCO2(arr: string[]): boolean {
-    const ratingToValue = (rating: string): number =>
-      ({ A: 1, B: 2, C: 3, D: 4, E: 5 }[rating] || 0);
-    for (let i = 1; i < arr.length; i++) {
-      if (ratingToValue(arr[i]) > ratingToValue(arr[i - 1])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   async getNameAfterSort(
     optionValue: "name,asc" | "name,desc"
   ): Promise<string[]> {
@@ -185,24 +128,6 @@ export class HomePage {
   ): Promise<string[]> {
     await this.applySort(optionValue);
     return await this.getCO2Ratings();
-  }
-
-  //Search products
-
-  async fillSearch(query: string): Promise<void> {
-    await this.searchComponent.searchQuery.fill(query);
-  }
-
-  async clickSearchButton(): Promise<void> {
-    await this.searchComponent.searchSubmit.click();
-  }
-
-  async clickSearchReset(): Promise<void> {
-    await this.searchComponent.searchReset.click();
-  }
-
-  async getCurrentSearchQuery(): Promise<string> {
-    return await this.searchComponent.searchQuery.inputValue();
   }
 
   async checkIfProductNamesInclude(searchTerm: string): Promise<boolean> {
